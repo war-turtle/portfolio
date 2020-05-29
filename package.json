@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel site/index.html",
-    "build": "parcel build site/index.html --out-dir ./"
+    "build": "parcel build site/index.html --out-dir ./ --public-url ./"
   },
   "author": "war-turtle",
   "license": "ISC",
