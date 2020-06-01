@@ -1,37 +1,40 @@
 import THREE from './dep/three';
+import { Turtle } from './mesh';
 
 const canvas = document.querySelector('#canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
 const fov = 75;
-const aspect = 2;  // the canvas default
+const aspect = 2;
 const near = 0.1;
-const far = 5;
+const far = 1000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 var controls = new THREE.OrbitControls(camera, canvas);
-camera.position.z = 5;
+camera.position.set(0, 5, 0);
 controls.update();
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x444444);
 
-{
-    const color = 0xFFFFFF;
-    const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
-    scene.add(light);
-}
+// Lights
+var lights = [];
+lights[0] = new THREE.PointLight(0xffffff, 1, 0);
+lights[1] = new THREE.PointLight(0xffffff, 2, 0);
+lights[2] = new THREE.PointLight(0xffffff, 2, 0);
 
-const boxWidth = 1;
-const boxHeight = 1;
-const boxDepth = 1;
-const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+lights[0].position.set(0, 200, 100);
+lights[1].position.set(100, 200, 100);
+lights[2].position.set(- 100, - 200, - 100);
 
-const material = new THREE.MeshPhongMaterial({ color: 0x8844aa });
+scene.add(lights[0]);
+scene.add(lights[1]);
+scene.add(lights[2]);
 
-const cube = new THREE.Mesh(geometry, material);
-cube.position.set(0, 0, 0);
-scene.add(cube);
+var axesHelper = new THREE.AxesHelper(3);
+scene.add(axesHelper);
+
+// Adding Meshes to the scene
+scene.add(new Turtle().mesh);
 
 function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
