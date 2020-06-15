@@ -1,10 +1,93 @@
-html, body {
-    margin: 0;
-    height: 100%;
+:root {
+  --bgColor: #00000033;
+  --fontColor: #fff;
+
+  --bigFont: 50px;
+  --medFont: 30px;
+  --smFont: 20px;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  background-color: #56ccf2;
 }
 
 #canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+#container {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 100px;
+  padding-top: 100px;
+  position: relative;
+  z-index: 1;
+  /* display: flex; */
+  /* justify-content: center; */
+  color: var(--fontColor);
+  text-align: center;
+}
+
+.mtB {
+  margin-top: 30px !important;
+}
+
+.mtS {
+  margin-top: 20px !important;
+}
+
+.avatar {
+  width: 300px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.heading {
+  font-size: var(--bigFont);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.subHeading {
+  font-size: var(--medFont);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.text {
+  font-size: var(--smFont);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.underline {
+  display: inline-block;
+  border-bottom: 2px solid var(--fontColor);
+}
+
+.buttons div {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid var(--fontColor);
+  border-radius: 3px;
+}
+
+.button:hover div {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid var(--bgColor);
+  border-radius: 3px;
 }

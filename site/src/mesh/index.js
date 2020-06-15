@@ -6,30 +6,29 @@ import { randomInt } from "../helper";
 const sphereGeometry = new THREE.SphereBufferGeometry(1, 6, 3, 0, Math.PI * 2, 0, 0.5 * Math.PI);
 const boxGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
 
-// const wingGeometry = new THREE.BoxGeometry(1, 0.05, 1);
-// wingGeometry.vertices[0].x -= 0.5;
-// wingGeometry.vertices[2].x -= 0.5;
-
 // Materials
 const Materials = {
     brown: new THREE.MeshPhongMaterial({ color: '#442727', flatShading: true, shininess: 30 }),
     green: new THREE.MeshPhongMaterial({ color: '#06623b', flatShading: true, shininess: 30 }),
-    grey: new THREE.MeshPhongMaterial({ color: 'grey', flatShading: true }),
-    clouds: new THREE.MeshPhongMaterial({ color: 0xeeeeee, flatShading: true }),
+    grey: new THREE.MeshPhongMaterial({ color: '#eeeeee', flatShading: true }),
 };
 
-// Mesh classes
+// Mesh classeseeeeee
 class Turtle {
-    constructor() {
+    constructor(x, y) {
+        this.initX = x;
         this.mesh = new THREE.Group();
 
         this.mesh.add(this.createShell());
         this.mesh.add(this.createFace());
-        this.mesh.add(this.createLeg());
 
-        this.mesh.position.set(-1, 0, 0);
+        const legs = this.createLeg();
+        this.mesh.add(legs[0]);
 
-        this.animateTurtle();
+        this.mesh.rotation.set(0, -0.3, 0);
+        this.mesh.position.set(x, y, 0);
+
+        this.animateTurtle(legs[1], legs[2]);
     }
 
     createShell() {
@@ -53,7 +52,6 @@ class Turtle {
         group.add(face);
         group.add(eye);
 
-        this.animateFace(face);
         this.animateEye(eye);
 
         return group;
@@ -77,64 +75,50 @@ class Turtle {
         backLegPivot.rotation.set(0, -Math.PI / 6, 0);
 
         const backLeg = new THREE.Mesh(boxGeometry, Materials.green);
-        // backLeg.position.set(-0.6, 0.1, 0.75);
         backLeg.position.set(-0.1, 0, 0.25);
         backLeg.scale.set(0.2, 0.2, 0.25);
 
         backLegPivot.add(backLeg);
 
-        const point = new THREE.Geometry();
-        point.vertices.push(
-            new THREE.Vector3(-0.5, 0.1, 0.5)
-        );
-
-        legs.add(new THREE.Points(point, new THREE.PointsMaterial({ color: "red", size: 0.1 })))
-
-        this.animateLegs(frontLegPivot, backLegPivot);
-
         legs.add(frontLegPivot);
         legs.add(backLegPivot);
-        return legs;
+        return [legs, frontLegPivot, backLegPivot];
     }
 
-    animateTurtle() {
-        gsap.to(this.mesh.position, {
-            duration: 1,
-            y: 0.2,
-            yoyo: true,
-            repeat: -1,
-            ease: "sine.inOut",
-        });
-    }
+    animateTurtle(frontLegPivot, backLegPivot) {
+        const initX = this.initX;
 
-    animateLegs(frontLegPivot, backLegPivot) {
+        function animation(turtle) {
+            if (turtle.x >= -initX) {
+                turtle.x = initX;
+            }
+            gsap.to(turtle, {
+                duration: 1,
+                delay: 1,
+                x: "+=0.1",
+                ease: "power1.out",
+                onComplete: animation,
+                onCompleteParams: [turtle]
+            });
+        }
+
+        gsap.delayedCall(1, animation, [this.mesh.position]);
         gsap.to(frontLegPivot.rotation, {
             duration: 1,
             y: 0,
             x: Math.PI / 6,
             repeat: -1,
             yoyo: true,
-            ease: "power1.inOut"
-        });
-
+            ease: "power1.out"
+        }, 0);
         gsap.to(backLegPivot.rotation, {
             duration: 1,
             y: -Math.PI / 3,
             x: Math.PI / 6,
             repeat: -1,
             yoyo: true,
-            ease: "power1.inOut"
-        })
-    }
-
-    animateFace(face) {
-        gsap.to(face.rotation, {
-            duration: 1,
-            z: -Math.PI / 10,
-            yoyo: true,
-            repeat: -1,
-            ease: "sine.inOut",
-        });
+            ease: "power1.out"
+        }, 0);
     }
 
     animateEye(eye) {
@@ -148,8 +132,11 @@ class Turtle {
 }
 
 class Cloud {
-    constructor(x, y, z) {
-        this.mesh = this.createClouds(x, y, z);
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+
+        this.mesh = this.createClouds(width / 200 + 2, randomInt(-height / 300, height / 300), 1);
 
         this.animateCloud();
     }
@@ -158,7 +145,7 @@ class Cloud {
         const clouds = new THREE.Group();
 
         const cloudGeo = new THREE.SphereGeometry(5, 4, 6);
-        const cloud1 = new THREE.Mesh(cloudGeo, Materials.clouds);
+        const cloud1 = new THREE.Mesh(cloudGeo, Materials.grey);
         cloud1.scale.set(1, 0.8, 1);
 
         const cloud2 = cloud1.clone();
@@ -181,15 +168,14 @@ class Cloud {
 
     animateCloud() {
         gsap.to(this.mesh.position, {
-            duration: 5,
-            x: -20,
+            duration: randomInt(10, 15),
+            x: -this.width / 200 - 2,
             repeat: -1,
             repeatDelay: 0,
             delay: randomInt(0, 10),
-            repeatDelay: randomInt(0, 5),
+            ease: "none",
             onRepeat: () => {
-                this.mesh.position.y = randomInt(-2, 2);
-                this.mesh.position.z = randomInt(-2, 2);
+                this.mesh.position.y = randomInt(-this.height / 300, this.height / 300);
             }
         });
     }
