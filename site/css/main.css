@@ -1,18 +1,22 @@
 :root {
-  --bgColor: #00000033;
+  --bgColor: #56ccf2;
   --fontColor: #fff;
 
   --bigFont: 50px;
-  --medFont: 30px;
-  --smFont: 20px;
+  --medFont: 35px;
+  --smFont: 25px;
+
+  --bigFontWg: 700;
+  --medFontWg: 500;
+  --smFontWg: 400;
 }
 
 html,
 body {
   margin: 0;
   height: 100%;
-  font-family: "Roboto", sans-serif;
-  background-color: #56ccf2;
+  font-family: "Fira Sans", sans-serif;
+  background-color: var(--bgColor);
 }
 
 #canvas {
@@ -30,13 +34,30 @@ body {
   width: 80%;
   margin: auto;
   margin-bottom: 100px;
-  padding-top: 100px;
   position: relative;
   z-index: 1;
   /* display: flex; */
   /* justify-content: center; */
   color: var(--fontColor);
   text-align: center;
+}
+
+.fullPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 30px;
+  height: auto;
+}
+
+.icon path {
+  fill: var(--fontColor);
+  stroke: var(--fontColor);
 }
 
 .mtB {
@@ -55,18 +76,21 @@ body {
 
 .heading {
   font-size: var(--bigFont);
+  font-weight: var(--bigFontWg);
   margin-top: 0;
   margin-bottom: 0;
 }
 
 .subHeading {
   font-size: var(--medFont);
+  font-weight: var(--medFontWg);
   margin-top: 0;
   margin-bottom: 0;
 }
 
 .text {
   font-size: var(--smFont);
+  font-weight: var(--smFontWg);
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -76,7 +100,25 @@ body {
   border-bottom: 2px solid var(--fontColor);
 }
 
-.buttons div {
+.button {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid var(--fontColor);
+  border-radius: 3px;
+  text-decoration: none;
+  color: var(--fontColor);
+  font-size: var(--smFont);
+}
+
+.button:hover {
+  color: var(--bgColor);
+  background-color: var(--fontColor);
+  border: 2px solid var(--bgColor);
+  transition: 0.5s;
+}
+
+/* .buttons div {
   display: inline-block;
   margin: 10px;
   padding: 10px;
@@ -90,4 +132,4 @@ body {
   padding: 10px;
   border: 1px solid var(--bgColor);
   border-radius: 3px;
-}
+} */
