@@ -1,5 +1,11 @@
+import AOS from 'aos';
 import THREE from './dep/three';
 import { Turtle, Cloud } from './mesh';
+
+import 'aos/dist/aos.css';
+
+// Init AOS
+AOS.init();
 
 // WebGL Renderer
 const canvas = document.querySelector('#canvas');
